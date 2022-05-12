@@ -2,7 +2,8 @@ from argparse import ArgumentParser
 
 MIN_ID = 0
 MAX_ID = 65535
-
+#TODO
+# Check if no same id is mapped twice
 
 def validate_mapping(mapping: list) -> list:
     errors = list()
@@ -53,9 +54,10 @@ def create_mapping(mapping, label, offset):
             previous_id = ordered_keys[i-1]
             start_range = previous_id + 1 + offset
             remaining_entries = item - 1 - previous_id
-            out.append(
-                f"lxc.idmap: {label} {previous_id+1} {start_range} {remaining_entries}"
-            )
+            if remaining_entries > 0:
+                out.append(
+                    f"lxc.idmap: {label} {previous_id+1} {start_range} {remaining_entries}"
+                )
         out.append(
             f"lxc.idmap: {label} {item} {dict_map[item]} 1"
         )
